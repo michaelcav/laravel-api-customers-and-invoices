@@ -2,8 +2,9 @@
 
 namespace App\Filters\V1;
 
-use App\Filters\V1\ApiFilter;
 use Illuminate\Http\Request;
+use App\Filters\V1\ApiFilter;
+
 
 class InvoicesFilter extends ApiFilter
 {
@@ -31,6 +32,4 @@ class InvoicesFilter extends ApiFilter
         'gte' => '>=',
         'ne' => '!='
     ];
-
-
 }
