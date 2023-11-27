@@ -8,26 +8,19 @@ use Illuminate\Http\Request;
 class InvoicesFilter extends ApiFilter
 {
 
-    // $table->id();
-    // $table->foreignId('customer_id')->constrained();
-    // $table->integer('amount');
-    // $table->string('status');
-    // $table->datetime('billed_dated'); // Corrigindo o nome da coluna aqui
-    // $table->datetime('paid_dated')->nullable();
-    // $table->timestamps();
 
     protected $safeParms = [
-        'name' => ['eq'],
-        'type' => ['eq'],
-        'email' => ['eq'],
-        'address' => ['eq'],
-        'city' => ['eq'],
-        'state' => ['eq'],
-        'postalCode' => ['eq', 'gt', 'lt'],
+        'customerId' => ['eq'],
+        'amount' => ['eq', 'lt', 'gt', 'gte'],
+        'status' => ['eq', 'ne'],
+        'billed_dated' => ['eq', 'lt', 'gt', 'lte', 'gte'],
+        'paid_dated' => ['eq', 'lt', 'gt', 'lte', 'gte'],
     ];
 
     protected $columnMap = [
-        'postalCode' => 'postal_code',
+        'customerId' => 'customer_id',
+        'billedDated' => 'billed_dated',
+        'paidDated' => 'paid_dated',
     ];
 
     protected $operatorMap = [
@@ -36,6 +29,7 @@ class InvoicesFilter extends ApiFilter
         'gt' => '>',
         'lte' => '=<',
         'gte' => '>=',
+        'ne' => '!='
     ];
 
     public function  transform(Request $request)
