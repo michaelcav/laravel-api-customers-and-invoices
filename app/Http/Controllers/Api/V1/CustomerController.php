@@ -19,20 +19,27 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $filter = new CustomersFilter();
-        $queryItems = $filter->transform($request); // [['column', 'operator', 'value']]
+        $filterItems = $filter->transform($request); // [['column', 'operator', 'value']]
 
-        if (count($queryItems) == 0) {
+        $includeInvoices = $request->query('includeInvoices');
 
-            return new CustomerCollection(Customer::paginate());
-        } else {
-            $costumers = Customer::where($queryItems)->paginate();
+        // Aplicar filtros
+        $costumers = Customer::where($filterItems);
 
-           return new CustomerCollection($costumers->appends($request->query()));
+        if ($includeInvoices) {
+            // Incluir faturas se o parâmetro 'includeInvoices' estiver presente
+            $costumers->when($includeInvoices, function ($query) {
+                return $query->with('invoices');
+            });
         }
-        // return new InvoiceCollection(Invoices::all());
 
-        // return new CustomerCollection(Customer::all());
+        // Retornar resultados paginados
+        return new CustomerCollection($costumers->paginate()->appends($request->query()));
     }
+    // return new InvoiceCollection(Invoices::all());
+
+    // return new CustomerCollection(Customer::all());
+
 
     /**
      * Show the form for creating a new resource.
@@ -54,8 +61,14 @@ class CustomerController extends Controller
      * Display the specified resource.
      */
     public function show(Customer $customer)
+
     {
         // return $customer;
+        $includeInvoices = request()->query('includeInvoices');
+
+        if($includeInvoices) {
+            return new CustomerResource($customer->loadMissing('invoices'));
+        }
 
         return new CustomerResource($customer);
     }
