@@ -11,7 +11,7 @@ class CustomersFilter extends ApiFilter
         'name' => ['eq'],
         'type' => ['eq'],
         'email' => ['eq'],
-        'address' => ['eq'],
+        'adress' => ['eq'],
         'city' => ['eq'],
         'state' => ['eq'],
         'postalCode' => ['eq', 'gt', 'lt'],
